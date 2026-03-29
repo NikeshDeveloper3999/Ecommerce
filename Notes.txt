@@ -1,0 +1,39 @@
+front end 
+
+install dependence
+npm create vite@latest
+npm i react-router-dom
+npm i react-toastify  -- use for notification 
+install tailwind css 
+
+folder structure 
+Pages  
+in this pages we setup our routes 
+
+Componets
+Context -- in context we can manage our frontend logic 
+
+
+
+step 1 -  main.jsx 
+
+ wrap app to inside  BrowserRouter because app fully sapport BrowserRouter
+ <BrowserRouter>
+  <App></App>
+  </BrowserRouter>
+
+step 2 app.jsx
+setup the routes  exp 
+<Route path="/" element={<Home />} />
+
+context 📍
+we create all the common variable and state variable in one places 
+
+
+-------------middleware------------
+
+
+
+
+
+
