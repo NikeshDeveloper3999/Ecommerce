@@ -17,7 +17,9 @@ const orderRouter = require('./routes/OrderRoute');
 
 // app config
 const app = express();
-const port = process.env.PORT || 4000;
+const port = process.env.PORT;
+
+console.log( "port no " ,port)
 
 // database connections
 connectDB();
