@@ -1,6 +1,6 @@
 const express = require('express');
 const cors = require('cors');
-require('dotenv').config();
+require('dotenv').config({quiet:true});
 
 
 const connectDB = require('./Config/Db');
@@ -19,7 +19,7 @@ const orderRouter = require('./routes/OrderRoute');
 const app = express();
 const port = process.env.PORT;
 
-console.log( "port no " ,port)
+console.log( "port no ",port)
 
 // database connections
 connectDB();
@@ -33,6 +33,7 @@ app.use(cors());
 app.get('/', (req, res) => {
     res.send('API Working');
 });
+
 
 // routes
 app.use("/api/admin", adminRoutes);
