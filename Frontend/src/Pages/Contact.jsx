@@ -38,12 +38,14 @@ const Contact = () => {
 
           <p>
             📞 Phone: +91 98765 43210 <br />
+
             📧 Email: support@trendify.com
           </p>
 
           <div>
             <p className='font-semibold text-gray-800'>
               Store Hours
+              
             </p>
             <p>
               Monday – Sunday: 10:00 AM – 9:30 PM

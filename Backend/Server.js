@@ -12,7 +12,6 @@ const adminRoutes = require("./routes/AdminRoutes");
 const userRouter = require('./routes/userRoutes');
 const productrouter = require('./routes/ProductRoutes');
 const Cartrouter = require('./routes/CartItemRoutes')
-const OrderROuter = require('./routes/OrderRoute'); 
 const orderRouter = require('./routes/OrderRoute');
 
 // app config

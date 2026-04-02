@@ -3,7 +3,7 @@ const mongoose = require("mongoose");
 const feedbackSchema = new mongoose.Schema({
   ratings: { type: Number, enum: [1, 2, 3, 4, 5] },
   feedback: { type: String },
-  reviewerName: { type: mongoose.Schema.Types.ObjectId, ref: "users" },
+  reviewerName: { type: mongoose.Schema.Types.ObjectId, ref: "User" },
   productMediaData: { type: String },
 });
 

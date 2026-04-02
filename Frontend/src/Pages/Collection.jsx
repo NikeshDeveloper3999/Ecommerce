@@ -230,6 +230,7 @@ const totalPages = Math.ceil(filterProducts.length / productsPerPage);
               product_mrp={item.product_mrp}
               product_discount_price={item.product_discount_price}
               product_image={item.product_image}
+              
             />
           ))
         )
@@ -254,11 +255,12 @@ const totalPages = Math.ceil(filterProducts.length / productsPerPage);
     </button>
 
     {/* Page Indicator */}
-    <span className="px-1 border rounded bg-gray-100 ">
+    <span className="px-1 border rounded bg-gray-100  ">
       Page {currentPage}
     </span>
 
-    {/* Next Button */}
+
+
     <button
       onClick={() =>
         setCurrentPage((prev) =>

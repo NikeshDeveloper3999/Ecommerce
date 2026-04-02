@@ -4,8 +4,11 @@
   "description": "",
   "main": "Server.js",
   "scripts": {
-  "start": "node Backend/Server.js",
-    "server": "nodemon Server.js"
+    "start": "node Server.js",
+    "dev": "nodemon Server.js"
+  },
+  "engines": {
+    "node": ">=18.0.0"
   },
   "author": "",
   "license": "ISC",
@@ -14,7 +17,7 @@
     "bcryptjs": "^3.0.3",
     "cloudinary": "^2.9.0",
     "cors": "^2.8.6",
-    "dotenv": "^17.3.1",
+    "dotenv": "^16.4.5",
     "express": "^5.2.1",
     "jsonwebtoken": "^9.0.3",
     "mongoose": "^9.2.1",
