@@ -1,5 +1,5 @@
 const mongoose = require('mongoose')
-const userModel = require('../models/usermodel') 
+const userModel = require('../models/userModel')
 const findUser = async ({ email }) => {
 const user = await userModel.findOne({
     $or: [

@@ -1,5 +1,5 @@
 const orderModel = require('../models/OrderModel')
-const userModel = require('../models/usermodel')
+const userModel = require('../models/userModel')
 const jwt = require("jsonwebtoken")
 
 
