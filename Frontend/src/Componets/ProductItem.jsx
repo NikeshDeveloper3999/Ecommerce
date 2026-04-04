@@ -20,42 +20,44 @@ const ProductItem = ({ product_code, product_name, product_mrp, product_image,pr
         product_image,
       },
     }}
-    className="text-gray-700 cursor-pointer group block"
+    className="group block bg-white rounded-xl overflow-hidden shadow-sm hover:shadow-md transition duration-300"
   >
-    <div className="overflow-hidden rounded-xl w-full h-64 bg-gray-100 flex items-center justify-center">
-      <img
-        className="w-full h-full object-cover hover:scale-110 transition duration-300 ease-in-out"
-        src={mainImage}
-        alt={product_name || "Product Image"}
-      />
-    </div>
-
-    {/* Product Name */}
-    <p className="pt-3 pb-1 text-sm group-hover:text-black transition truncate">
-      {product_name || "Unnamed Product"}
-    </p>
-<div className="flex items-center gap-2">
-  {/* If discount exists AND is different */}
-  {product_discount_price && product_discount_price !== product_mrp ? (
-    <>
-      {/* Original Price */}
-      <p className="text-gray-400 text-sm line-through">
-        {currency}{product_mrp}
-      </p>
-
-      {/* Discount Price */}
-      <p className="text-sm font-semibold text-pink-500">
-        {currency}{product_discount_price}
-      </p>
-    </>
-  ) : (
-    /* Only one price */
-    <p className="text-sm font-semibold text-gray-700">
-      {currency}{product_mrp}
-    </p>
-  )}
+    {/* IMAGE CONTAINER */}
+    <div className="w-full aspect-[4/5] bg-gray-100 overflow-hidden rounded-lg">
+  <img
+    src={mainImage}
+    alt={product_name || "Product Image"}
+    className="w-full h-full object-contain p-2 group-hover:scale-105 transition duration-300"
+  />
 </div>
+
+    {/* CONTENT */}
+    <div className="p-3">
+      {/* Product Name */}
+      <p className="text-sm sm:text-base font-medium text-gray-700 group-hover:text-black transition line-clamp-2">
+        {product_name || "Unnamed Product"}
+      </p>
+
+      {/* PRICE */}
+      <div className="flex items-center gap-2 mt-1">
+        {product_discount_price && product_discount_price !== product_mrp ? (
+          <>
+            <p className="text-gray-400 text-xs sm:text-sm line-through">
+              {currency}{product_mrp}
+            </p>
+            <p className="text-sm sm:text-base font-semibold text-pink-500">
+              {currency}{product_discount_price}
+            </p>
+          </>
+        ) : (
+          <p className="text-sm sm:text-base font-semibold text-gray-800">
+            {currency}{product_mrp}
+          </p>
+        )}
+      </div>
+    </div>
   </Link>
+
 );
 };
 

@@ -167,6 +167,33 @@ const deleteUser = async (req, res) => {
   }
 };
 
+
+
+app.post("/api/user/forgot-password", async (req, res) => {
+  const { email } = req.body;
+
+  // 1. Check user exists
+  const user = await User.findOne({ email });
+  if (!user) {
+    return res.json({ success: false, message: "User not found" });
+  }
+
+  // 2. Generate token
+  const token = Math.random().toString(36).slice(2);
+
+  // 3. Save token (DB)
+  user.resetToken = token;
+  await user.save();
+
+  // 4. Send email (use nodemailer)
+  console.log(`Reset link: http://localhost:5173/reset-password/${token}`);
+
+  res.json({ success: true, message: "Reset link sent" });
+});
+
+
+
+
 module.exports = {
   registerUser,
   loginUser,

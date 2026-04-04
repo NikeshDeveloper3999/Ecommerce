@@ -63,15 +63,13 @@ const Product = () => {
   </div>
 
   {/* Main Image */}
-  <div className="order-1 lg:order-2 w-full flex justify-center">
+  <div className="order-1 lg:order-2 max-w-[500px] aspect-[4/5] bg-gray-100 rounded-lg flex items-center justify-center overflow-hidden mx-auto "> 
+    
+
     <img
       src={image}
       alt=""
-      className="
-        w-[85%] sm:w-[75%] lg:w-full 
-        h-[320px] sm:h-[300px] lg:h-[360px]
-        object-cover rounded-lg shadow-sm 
-        transition-transform duration-300 hover:scale-[1.02]
+      className="-full h-full object-contain p-4 transition duration-300 hover:scale-105 
       "
     />
   </div>

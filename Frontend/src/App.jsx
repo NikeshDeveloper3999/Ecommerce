@@ -66,6 +66,7 @@ const App = () => {
         <Route path="/login" element={<Login />} />
         <Route path="/place-order" element={<Placeorder />} />
         <Route path="/orders" element={<Orders/>} />
+        <Route path="/forgot-password" element={<ForgotPassword />} />
       </Routes>
 
       <Fotter />

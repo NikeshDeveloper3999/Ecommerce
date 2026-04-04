@@ -53,12 +53,11 @@ const ShopcontextProvider = (props) => {
       );
 
       toast.success(response.data.message);
+  } catch (err) {
+    console.error("Axios error:", err.response || err);
+    toast.error(err.response?.data?.message || "Something went wrong");
+  } 
 
-    } catch (error) {
-
-      toast.error(error.response?.data?.message || error.message);
-
-    }
   };
 
 

@@ -62,68 +62,91 @@ const Login = () => {
 
   return (
     <form
-      onSubmit={onSubmitHandler}
-      className="flex flex-col items-center w-[90%] sm:max-w-96 m-auto mt-14 gap-4 text-gray-800"
-    >
-      <div className="inline-flex items-center gap-2 mb-2 mt-10">
-        <p className="prata-regular text-3xl">{currentstate}</p>
-        <hr className="border-none h-[1.5px] w-8 bg-gray-800" />
-      </div>
+  onSubmit={onSubmitHandler}
+  className="flex flex-col items-center w-[90%] sm:max-w-96 m-auto mt-14 gap-5 text-gray-800"
+>
+  <div className="inline-flex items-center gap-2 mb-2 mt-10">
+    <p className="prata-regular text-4xl sm:text-5xl">
+      {currentstate}
+    </p>
+    <hr className="border-none h-[2px] w-10 bg-gray-800" />
+  </div>
 
-      {currentstate === "Sign Up" && (
-        <>
-          <input
-            type="text"
-            placeholder="Name"
-            value={name}
-            onChange={(e) => setname(e.target.value)}
-            className="w-full px-3 py-2 border border-gray-800"
-            required
-          />
-          <input
-            type="text"
-            placeholder="Contact Number"
-            value={contact}
-            onChange={(e) => setcontact(e.target.value)}
-            className="w-full px-3 py-2 border border-gray-800"
-            required
-          />
-        </>
-      )}
-
+  {currentstate === "Sign Up" && (
+    <>
       <input
-        type="email"
-        placeholder="Email"
-        value={email}
-        onChange={(e) => setemail(e.target.value)}
-        className="w-full px-3 py-2 border border-gray-800"
+        type="text"
+        placeholder="Name"
+        value={name}
+        onChange={(e) => setname(e.target.value)}
+        className="w-full px-4 py-3 border border-gray-800 text-base sm:text-lg"
         required
       />
       <input
-        type="password"
-        placeholder="Password"
-        value={password}
-        onChange={(e) => setpassword(e.target.value)}
-        className="w-full px-3 py-2 border border-gray-800"
+        type="text"
+        placeholder="Contact Number"
+        value={contact}
+        onChange={(e) => setcontact(e.target.value)}
+        className="w-full px-4 py-3 border border-gray-800 text-base sm:text-lg"
         required
       />
+    </>
+  )}
 
-      <div className="w-full flex justify-between text-sm mt-[-8px]">
-        <p className="cursor-pointer">Forgot your Password?</p>
-        {currentstate === "Login" ? (
-          <p className="cursor-pointer" onClick={() => setcurrentstate("Sign Up")}>Create account</p>
-        ) : (
-          <p className="cursor-pointer" onClick={() => setcurrentstate("Login")}>Login Here</p>
-        )}
-      </div>
+  <input
+    type="email"
+    placeholder="Email"
+    value={email}
+    onChange={(e) => setemail(e.target.value)}
+    className="w-full px-4 py-3 border border-gray-800 text-base sm:text-lg"
+    required
+  />
 
-      <button
-        disabled={loading}
-        className="bg-black text-white font-light px-8 py-2 mt-4"
+  <input
+    type="password"
+    placeholder="Password"
+    value={password}
+    onChange={(e) => setpassword(e.target.value)}
+    className="w-full px-4 py-3 border border-gray-800 text-base sm:text-lg"
+    required
+  />
+
+  <div className="w-full flex justify-between text-base sm:text-lg mt-[-6px]">
+  <p
+  className="cursor-pointer"
+  onClick={() => navigate("/forgot-password")}
+>
+  Forgot your Password?
+</p>
+
+    {currentstate === "Login" ? (
+      <p
+        className="cursor-pointer text-blue-600 hover:underline"
+        onClick={() => setcurrentstate("Sign Up")}
       >
-        {loading ? "Please wait..." : currentstate === "Login" ? "Sign In" : "Sign Up"}
-      </button>
-    </form>
+        Create account
+      </p>
+    ) : (
+      <p
+        className="cursor-pointer text-blue-600 hover:underline"
+        onClick={() => setcurrentstate("Login")}
+      >
+        Login Here
+      </p>
+    )}
+  </div>
+
+  <button
+    disabled={loading}
+    className="bg-black text-white text-base sm:text-lg font-light px-10 py-3 mt-4"
+  >
+    {loading
+      ? "Please wait..."
+      : currentstate === "Login"
+      ? "Sign In"
+      : "Sign Up"}
+  </button>
+</form>
   );
 };
 
