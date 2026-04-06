@@ -19,6 +19,8 @@ import Fotter from "./Componets/Fotter";
 import SearchBar from "./Componets/SearchBar";
 import ScrollToTop from "./Componets/ScrollToTop";
 import { Shopcontext } from './Context/Shopcontext';
+import ForgotPassword from './Pages/ForgotPassword';
+
 
 
 const App = () => {

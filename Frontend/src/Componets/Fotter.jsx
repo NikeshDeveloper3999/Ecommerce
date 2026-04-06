@@ -1,6 +1,6 @@
 import React, { useEffect, useRef } from "react";
 import { assets } from "../assets/assets";
-import { NavLink } from "react-router-dom";
+import { NavLink } from "react-router";
 import { gsap } from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 
