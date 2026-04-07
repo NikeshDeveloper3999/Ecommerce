@@ -8,6 +8,8 @@ const crypto = require("crypto");
 const nodemailer = require("nodemailer");
 
 
+
+
 // REGISTER USER
 const registerUser = async (req, res) => {
   try {
@@ -172,8 +174,6 @@ const deleteUser = async (req, res) => {
 };
 
 
-
-// FORGOT PASSWORD
 const forgotPassword = async (req, res) => {
   try {
     const { email } = req.body;
@@ -181,54 +181,64 @@ const forgotPassword = async (req, res) => {
     const user = await userModel.findOne({ email });
 
     if (!user) {
-      return res.status(404).json({ message: "User not found" });
+      return res.status(404).json({
+        success: false,
+        message: "User not found",
+      });
     }
 
-    // Generate Token
     const resetToken = crypto.randomBytes(32).toString("hex");
 
-    // Hash Token
     const hashedToken = crypto
       .createHash("sha256")
       .update(resetToken)
       .digest("hex");
 
     user.resetPasswordToken = hashedToken;
-    user.resetPasswordExpire = Date.now() + 10 * 60 * 1000; // 10 min
+    user.resetPasswordExpire = Date.now() + 10 * 60 * 1000;
 
     await user.save();
 
-    // Reset URL
-    const resetUrl = `http://${process.env.VITE_BACKEND_URL}/reset-password/${resetToken}`;
 
-    // Send Email
     const transporter = nodemailer.createTransport({
       service: "gmail",
       auth: {
-        user: "YOUR_EMAIL@gmail.com",
-        pass: "YOUR_APP_PASSWORD",
+        user: process.env.EMAIL_USER,
+        pass: process.env.EMAIL_PASS,
       },
     });
 
+    const resetUrl = `${process.env.FRONTEND_URL}/reset-password/${resetToken}`;
+
     const message = `
-      You requested password reset.
+You requested a password reset.
 
-      Click here:
-      ${resetUrl}
+Click here:
+${resetUrl}
 
-      If not requested, ignore this email.
-    `;
+If not requested, ignore this email.
+`;
+
+    console.log("Sending email to:", user.email);
 
     await transporter.sendMail({
+      from: process.env.EMAIL_USER,
       to: user.email,
       subject: "Password Reset",
       text: message,
     });
 
-    res.json({ message: "Reset link sent to email" });
+    res.json({
+      success: true,
+      message: "Reset link sent to email",
+    });
 
   } catch (error) {
-    res.status(500).json({ message: error.message });
+    console.log("FORGOT PASSWORD ERROR:", error); 
+    res.status(500).json({
+      success: false,
+      message: "Server error",
+    });
   }
 };
 
