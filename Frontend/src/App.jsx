@@ -20,11 +20,10 @@ import SearchBar from "./Componets/SearchBar";
 import ScrollToTop from "./Componets/ScrollToTop";
 import { Shopcontext } from './Context/Shopcontext';
 import ForgotPassword from './Pages/ForgotPassword';
-
-
+import ResetPassword from './Pages/ResetPassword';
 
 const App = () => {
-  const {Token} =useContext(Shopcontext);
+  const { Token } = useContext(Shopcontext);
 
   useEffect(() => {
     const lenis = new Lenis({
@@ -48,35 +47,35 @@ const App = () => {
   }, []);
 
   return (
-    <>
-     {!Token ? (
-      <Login/>
-    ) : (
     <div className="px-4 sm:px-[5vw] md:px-[7vw] lg:px-[9vw]">
       <ToastContainer />
-      <ScrollToTop />   
-      <Navbar />
-      <SearchBar />
+      <ScrollToTop />
+
+      {/* ✅ Show Navbar only if logged in */}
+      {Token && <Navbar />}
+      {Token && <SearchBar />}
 
       <Routes>
-        <Route path="/" element={<Home />} />
-        <Route path="/collection" element={<Collection />} />
+        <Route path="/" element={Token ? <Home /> : <Login />} />
+        <Route path="/collection" element={Token ? <Collection /> : <Login />} />
         <Route path="/about" element={<About />} />
         <Route path="/contact" element={<Contact />} />
-        <Route path="/product/:productId" element={<Product />} />
-        <Route path="/cart" element={<Cart />} />
+        <Route path="/product/:productId" element={Token ? <Product /> : <Login />} />
+        <Route path="/cart" element={Token ? <Cart /> : <Login />} />
+        <Route path="/place-order" element={Token ? <Placeorder /> : <Login />} />
+        <Route path="/orders" element={Token ? <Orders /> : <Login />} />
+
+        {/* ✅ ALWAYS accessible */}
         <Route path="/login" element={<Login />} />
-        <Route path="/place-order" element={<Placeorder />} />
-        <Route path="/orders" element={<Orders/>} />
         <Route path="/forgot-password" element={<ForgotPassword />} />
+        <Route path="/reset-password/:token" element={<ResetPassword />} />
       </Routes>
 
-      <Fotter />
+      {Token && <Fotter />}
     </div>
-)}
-</>
-  )
+  );
 };
+
 
 export default App;
 

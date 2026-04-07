@@ -4,6 +4,10 @@ const validator = require("validator");
 const { generateToken } = require("../Utility/GenerateToken.js");
 const userService = require("../services/UserServices.js");
 
+const crypto = require("crypto");
+const nodemailer = require("nodemailer");
+
+
 // REGISTER USER
 const registerUser = async (req, res) => {
   try {
@@ -169,29 +173,102 @@ const deleteUser = async (req, res) => {
 
 
 
-app.post("/api/user/forgot-password", async (req, res) => {
-  const { email } = req.body;
+// FORGOT PASSWORD
+const forgotPassword = async (req, res) => {
+  try {
+    const { email } = req.body;
 
-  // 1. Check user exists
-  const user = await User.findOne({ email });
-  if (!user) {
-    return res.json({ success: false, message: "User not found" });
+    const user = await userModel.findOne({ email });
+
+    if (!user) {
+      return res.status(404).json({ message: "User not found" });
+    }
+
+    // Generate Token
+    const resetToken = crypto.randomBytes(32).toString("hex");
+
+    // Hash Token
+    const hashedToken = crypto
+      .createHash("sha256")
+      .update(resetToken)
+      .digest("hex");
+
+    user.resetPasswordToken = hashedToken;
+    user.resetPasswordExpire = Date.now() + 10 * 60 * 1000; // 10 min
+
+    await user.save();
+
+    // Reset URL
+    const resetUrl = `http://${process.env.VITE_BACKEND_URL}/reset-password/${resetToken}`;
+
+    // Send Email
+    const transporter = nodemailer.createTransport({
+      service: "gmail",
+      auth: {
+        user: "YOUR_EMAIL@gmail.com",
+        pass: "YOUR_APP_PASSWORD",
+      },
+    });
+
+    const message = `
+      You requested password reset.
+
+      Click here:
+      ${resetUrl}
+
+      If not requested, ignore this email.
+    `;
+
+    await transporter.sendMail({
+      to: user.email,
+      subject: "Password Reset",
+      text: message,
+    });
+
+    res.json({ message: "Reset link sent to email" });
+
+  } catch (error) {
+    res.status(500).json({ message: error.message });
   }
-
-  // 2. Generate token
-  const token = Math.random().toString(36).slice(2);
-
-  // 3. Save token (DB)
-  user.resetToken = token;
-  await user.save();
-
-  // 4. Send email (use nodemailer)
-  console.log(`Reset link: http://localhost:5173/reset-password/${token}`);
-
-  res.json({ success: true, message: "Reset link sent" });
-});
+};
 
 
+
+const resetPassword = async (req, res) => {
+  try {
+    const { token } = req.params;
+    const { password } = req.body;
+
+    // Hash token from URL
+    const hashedToken = crypto
+      .createHash("sha256")
+      .update(token)
+      .digest("hex");
+
+    const user = await userModel.findOne({
+      resetPasswordToken: hashedToken,
+      resetPasswordExpire: { $gt: Date.now() },
+    });
+
+    if (!user) {
+      return res.status(400).json({ message: "Invalid or expired token" });
+    }
+
+    // Update password
+    const bcrypt = require("bcryptjs");
+    user.password = await bcrypt.hash(password, 10);
+
+    user.resetPasswordToken = undefined;
+    user.resetPasswordExpire = undefined;
+
+    await user.save();
+
+    res.json({ message: "Password reset successful" });
+
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+};
 
 
 module.exports = {
@@ -199,4 +276,6 @@ module.exports = {
   loginUser,
   updateUser,
   deleteUser,
+  forgotPassword,
+  resetPassword,
 };

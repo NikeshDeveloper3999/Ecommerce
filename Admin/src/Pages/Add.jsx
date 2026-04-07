@@ -56,6 +56,9 @@ const [subCategory, setSubCategory] = useState("");
   const onsubmitHandler = async (e) => {
   e.preventDefault();
 
+
+  
+
   try {
     const formData = new FormData();
 
@@ -145,6 +148,29 @@ setFormKey(Date.now());
   } else {
       toast.error(response.data.message); 
     }
+
+    
+const getAllowedSizes = () => {
+  if (category === "Kids") {
+    return ["2","4","6","8","10","12","14"];
+  }
+
+  if (subCategory === "Topwear") {
+    return ["S","M","L","XL","XXL"];
+  }
+
+  if (subCategory === "Bottomwear") {
+    if (category === "Women") {
+      return ["26","28","30","32","34","36"];
+    }
+    if (category === "Men") {
+      return ["28","30","32","34","36"];
+    }
+  }
+
+  return [];
+};
+
   } catch (error) {
     console.error(error);
 

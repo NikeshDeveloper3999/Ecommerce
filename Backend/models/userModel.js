@@ -28,7 +28,12 @@ const userSchema = new mongoose.Schema({
     pincode: { type: Number },
     nation: { type: String, default: "Bharat", trim: true }
   },
-
+  resetPasswordToken: {
+    type: String
+  },
+  resetPasswordExpire: {
+    type: Date
+  },
   isActive: {
     type: String,
     enum: ["Active", "InActive", "Banned"],

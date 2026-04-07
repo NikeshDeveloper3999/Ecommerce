@@ -24,5 +24,7 @@ router.put("/update/:id", userController.updateUser);
 // DELETE /api/users/delete/:id
 router.delete("/delete/:id", userController.deleteUser);
 
+router.post("/forgot-password", userController.forgotPassword);
+router.post("/reset-password/:token",userController.resetPassword);
 
 module.exports = router;
