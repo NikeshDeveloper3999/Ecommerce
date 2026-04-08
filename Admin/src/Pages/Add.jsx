@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState  , useEffect } from "react";
 import { assets } from "../assets/assets";
 import axios from 'axios'
 import {backendUrl} from '../App'
@@ -57,6 +57,36 @@ useEffect(() => {
 }, [category, subCategory]);
 
 
+const getAllowedSizes = () => {
+
+  if (category === "Kids") {
+    return ["2","4","6","8","10","12","14"];
+  }
+
+  if (subCategory === "Topwear") {
+    return ["S","M","L","XL","XXL"];
+  }
+
+  if (subCategory === "Bottomwear") {
+    if (category === "Women") {
+      return ["26","28","30","32","34","36"];
+    }
+    if (category === "Men") {
+      return ["28","30","32","34","36"];
+    }
+  }
+
+  if (subCategory === "Footwear") {
+    if (category === "Kids") {
+      return ["2","3","4","5"];
+    }
+    return ["6","7","8","9","10","11"];
+  }
+
+  return [];
+};
+
+
   // ================= SUBMIT HANDLER =================
   const onsubmitHandler = async (e) => {
   e.preventDefault();
@@ -65,6 +95,27 @@ useEffect(() => {
   
 
   try {
+
+
+if (!category || !subCategory) {
+  toast.error("Please select category & subcategory");
+  return;
+}
+
+const allowedSizes = getAllowedSizes();
+
+if (sizes.length === 0) {
+  toast.error("Please select at least one size");
+  return;
+}
+
+const invalidSizes = sizes.filter(size => !allowedSizes.includes(size));
+
+if (invalidSizes.length > 0) {
+  toast.error(`Invalid sizes: ${invalidSizes.join(", ")}`);
+  return;
+}
+
     const formData = new FormData();
 
     formData.append("product_code", productCode);
@@ -100,6 +151,12 @@ image1 && formData.append("image1", image1);
 image2 && formData.append("image2", image2);
 image3 && formData.append("image3", image3);
 image4 && formData.append("image4", image4);
+
+
+
+
+
+
     const response = await axios.post(
       `${backendUrl}/api/product/add`,
       formData,
@@ -154,57 +211,12 @@ setFormKey(Date.now());
       toast.error(response.data.message); 
     }
 
-    
-const getAllowedSizes = () => {
-  if (category === "Kids") {
-    return ["2","4","6","8","10","12","14"];
-  }
-
-  if (subCategory === "Topwear") {
-    return ["S","M","L","XL","XXL"];
-  }
-
-  if (subCategory === "Bottomwear") {
-    if (category === "Women") {
-      return ["26","28","30","32","34","36"];
-    }
-    if (category === "Men") {
-      return ["28","30","32","34","36"];
-    }
-  }
-
-  return [];
-};
-
-
-
-if (!category || !subCategory) {
-  toast.error("Please select category & subcategory");
-  return;
-}
-
-const allowedSizes = getAllowedSizes();
-
-if (sizes.length === 0) {
-  toast.error("Please select at least one size");
-  return;
-}
-
-const invalidSizes = sizes.filter(size => !allowedSizes.includes(size));
-
-if (invalidSizes.length > 0) {
-  toast.error(`Invalid sizes: ${invalidSizes.join(", ")}`);
-  return;
-}
-
-
-
-
+  
 
   } catch (error) {
     console.error(error);
 
-    toast.error(error.response?.data?.message || error.message);
+toast.error(error.response?.data?.message || error.message);
   }
 };
   return (
@@ -311,10 +323,6 @@ if (invalidSizes.length > 0) {
 
 
 
-
-
-
-
         {/* ================= BASIC INFO ================= */}
         <input
           type="text"
@@ -353,21 +361,21 @@ if (invalidSizes.length > 0) {
           <div className="flex gap-2">
 
               {getAllowedSizes().map(size => (
-              <div
-                key={size}
-                onClick={() =>
-                  setSizes(prev =>
-                    prev.includes(size)
-                      ? prev.filter(item => item !== size)
-                      : [...prev, size]
-                  )
-                }
-              >
-                <p className={`${sizes.includes(size) ? "bg-pink-100" : "bg-slate-200"} px-3 py-1 cursor-pointer`}>
-                  {size}
-                </p>
-              </div>
-            ))}
+  <div
+    key={size}
+    onClick={() =>
+      setSizes(prev =>
+        prev.includes(size)
+          ? prev.filter(item => item !== size)
+          : [...prev, size]
+      )
+    }
+  >
+    <p className={`${sizes.includes(size) ? "bg-pink-100" : "bg-slate-200"} px-3 py-1 cursor-pointer`}>
+      {size}
+    </p>
+  </div>
+))}
 
           </div>
         </div>
