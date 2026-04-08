@@ -52,6 +52,11 @@ const [subCategory, setSubCategory] = useState("");
 
 
 
+useEffect(() => {
+  setSizes([]);
+}, [category, subCategory]);
+
+
   // ================= SUBMIT HANDLER =================
   const onsubmitHandler = async (e) => {
   e.preventDefault();
@@ -170,6 +175,31 @@ const getAllowedSizes = () => {
 
   return [];
 };
+
+
+
+if (!category || !subCategory) {
+  toast.error("Please select category & subcategory");
+  return;
+}
+
+const allowedSizes = getAllowedSizes();
+
+if (sizes.length === 0) {
+  toast.error("Please select at least one size");
+  return;
+}
+
+const invalidSizes = sizes.filter(size => !allowedSizes.includes(size));
+
+if (invalidSizes.length > 0) {
+  toast.error(`Invalid sizes: ${invalidSizes.join(", ")}`);
+  return;
+}
+
+
+
+
 
   } catch (error) {
     console.error(error);
@@ -322,7 +352,7 @@ const getAllowedSizes = () => {
           <p className="mb-2">Product Size</p>
           <div className="flex gap-2">
 
-            {["S","M","L","XL","XXL"].map(size => (
+              {getAllowedSizes().map(size => (
               <div
                 key={size}
                 onClick={() =>

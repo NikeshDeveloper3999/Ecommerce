@@ -187,6 +187,8 @@ const forgotPassword = async (req, res) => {
       });
     }
 
+    console.log("User found:", user);
+
     const resetToken = crypto.randomBytes(32).toString("hex");
 
     const hashedToken = crypto
