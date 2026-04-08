@@ -51,7 +51,6 @@ const App = () => {
       <ToastContainer />
       <ScrollToTop />
 
-      {/* ✅ Show Navbar only if logged in */}
       {Token && <Navbar />}
       {Token && <SearchBar />}
 
@@ -65,7 +64,6 @@ const App = () => {
         <Route path="/place-order" element={Token ? <Placeorder /> : <Login />} />
         <Route path="/orders" element={Token ? <Orders /> : <Login />} />
 
-        {/* ✅ ALWAYS accessible */}
         <Route path="/login" element={<Login />} />
         <Route path="/forgot-password" element={<ForgotPassword />} />
         <Route path="/reset-password/:token" element={<ResetPassword />} />

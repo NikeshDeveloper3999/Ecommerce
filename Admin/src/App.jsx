@@ -1,10 +1,9 @@
 import React, { useState, useEffect } from 'react'
 import { ToastContainer } from 'react-toastify'
 import 'react-toastify/dist/ReactToastify.css'
-
-import Navbar from './Components/Navbar'
-import Sidebar from './Components/Sidebar'
-import Login from './Components/Login'
+import Navbar from './Componets/Navbar'
+import Sidebar from './Componets/Sidebar'
+import Login from './Componets/Login'
 
 import { Routes, Route } from 'react-router-dom'
 import List from './Pages/List'
@@ -21,6 +20,7 @@ const App = () => {
     localStorage.setItem('token', token)
   }, [token])
 
+  console.log(token)
   return (
     <div className='bg-gray-50 min-h-screen'>
       <ToastContainer />

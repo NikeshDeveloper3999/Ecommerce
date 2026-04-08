@@ -48,12 +48,14 @@ const Login = () => {
       setname(""); setemail(""); setpassword(""); setcontact("");
       navigate("/");
     } else {
-      toast.error(response.data.message);
+    toast.error(response.data.message);
+
 
     }
   } catch (err) {
     console.error("Axios error:", err.response || err);
-    toast.error(err.data.message);
+      toast.error(err.response?.data?.message || err.message);
+
 
   } finally {
     setLoading(false);
