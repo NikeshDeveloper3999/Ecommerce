@@ -111,7 +111,7 @@ const Cart = () => {
                 src={assets.bin_icon}
                 alt=""
                 className='w-4 sm:w-5 cursor-pointer'
-                onClick={() => updatequantity(item._id, item.size, 0)}
+                onClick={()=> updatequantity(item._id, item.size,0)}
               />
             </div>
           );
@@ -121,7 +121,6 @@ const Cart = () => {
       <div className="flex justify-end my-20">
         <div className="w-full sm:w-[450px]">
           <Carttotal />
-
           <div className="w-full text-end">
             <button
               onClick={() => navigate('/place-order')}

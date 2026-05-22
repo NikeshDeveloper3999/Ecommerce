@@ -3,8 +3,8 @@ const express = require("express");
 const {
   PlaceOrder,
   PlaceOrderRazorpay,
-  PlaceOrderStripe,
   updateStatus,
+  verifyRazorpay,
   AllOrders,
   userOrders
 } = require("../controllers/OrderController");
@@ -15,7 +15,6 @@ const authUser = require("../Middleware/Auth");
 const orderRouter = express.Router();
 
 
-// ================= ADMIN FEATURES =================
 
 // Get all orders
 orderRouter.post("/list", adminAuth, AllOrders);
@@ -23,18 +22,13 @@ orderRouter.post("/list", adminAuth, AllOrders);
 // Update order status
 orderRouter.post("/status", adminAuth, updateStatus);
 
-
-
-// ================= USER FEATURES =================
-
 // Place order (COD)
 orderRouter.post("/place", authUser, PlaceOrder);
 
 // Place order with Razorpay
 orderRouter.post("/razorpay", authUser, PlaceOrderRazorpay);
 
-// Place order with Stripe
-orderRouter.post("/stripe", authUser, PlaceOrderStripe);
+orderRouter.post("/verifyRazorpay",authUser,verifyRazorpay)
 
 // Get orders of logged-in user
 orderRouter.post("/userorders", authUser, userOrders);

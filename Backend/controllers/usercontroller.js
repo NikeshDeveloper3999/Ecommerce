@@ -3,7 +3,6 @@ const bcrypt = require("bcryptjs");
 const validator = require("validator");
 const { generateToken } = require("../Utility/GenerateToken.js");
 const userService = require("../services/UserServices.js");
-
 const crypto = require("crypto");
 const nodemailer = require("nodemailer");
 
@@ -112,6 +111,41 @@ const loginUser = async (req, res) => {
     return res.status(500).json({ success: false, message: "Server Error" });
   }
 };
+
+
+// GET USER DETAILS
+const getUserDetails = async (req, res) => {
+  try {
+
+    const userId = req.user.id;
+
+    const user = await userModel.findById(userId).select(
+      "-password"
+    );
+
+    if (!user) {
+      return res.status(404).json({
+        success: false,
+        message: "User not found",
+      });
+    }
+
+    res.status(200).json({
+      success: true,
+      user,
+    });
+
+  } catch (error) {
+
+    console.log(error);
+
+    res.status(500).json({
+      success: false,
+      message: "Server Error",
+    });
+  }
+};
+
 
 
 
@@ -290,4 +324,5 @@ module.exports = {
   deleteUser,
   forgotPassword,
   resetPassword,
+  getUserDetails
 };

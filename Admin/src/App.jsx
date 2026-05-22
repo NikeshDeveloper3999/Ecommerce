@@ -22,7 +22,7 @@ const App = () => {
 
   console.log(token)
   return (
-    <div className='bg-gray-50 min-h-screen'>
+    <div className='bg-gray-50 min-h-screen bg-green'>
       <ToastContainer />
 
       {token === "" ? (
@@ -30,11 +30,9 @@ const App = () => {
       ) : (
         <>
           <Navbar settoken={settoken} />
-          <hr />
-
+          <hr/>
           <div className="flex w-full">
             <Sidebar />
-
             <div className="w-[70%] mx-auto ml-[max(5vw,25px)] my-8 text-gray-600 text-base">
               <Routes>
                 <Route path='/' element={<List token={token} />} />

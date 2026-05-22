@@ -87,7 +87,7 @@ useEffect(() => {
   {Token && (
     <div className="group-hover:block hidden absolute right-0 pt-4   z-10">
       <div className="flex flex-col gap-2 w-36 px-5 py-3 bg-white text-gray-600 rounded-md shadow-lg border z-10 relative">
-        <p className="cursor-pointer hover:text-black">My Profile</p>
+        <p className="cursor-pointer hover:text-black" onClick={()=>navigate('/myprofile')} >My Profile</p>
         <p onClick={() => navigate("/orders")} className="cursor-pointer hover:text-black">
           Orders
         </p>

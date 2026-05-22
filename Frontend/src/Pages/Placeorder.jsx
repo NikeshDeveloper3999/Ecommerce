@@ -25,13 +25,85 @@ const Placeorder = () => {
 })
 
 
+const {navigate ,placeOrder , backendURL, cartItem,setcartItem,Token ,carttotalAmount, products,currency,delivery_fee} = useContext(Shopcontext);
 const onchangeHandler = (event)=>{
   const name = event.target.name;
   const value = event.target.value;
   setformData(data => ({   ...data,[name]: value}))
 
 }
-const {navigate ,placeOrder , backendURL, cartItem,setcartItem,Token ,carttotalAmount, products,currency,delivery_fee} = useContext(Shopcontext);
+
+const initPay = (order) => {
+
+  const options = {
+
+    key: import.meta.env.VITE_RAZORPAY_KEY_ID,
+
+    amount: order.amount,
+
+    currency: order.currency,
+
+    name: "Order Payment",
+
+    description: "Order Payment",
+
+    order_id: order.id,
+
+    receipt: order.receipt,
+
+    handler: async (response) => {
+
+      try {
+
+        const verifyResponse = await axios.post(
+          backendURL + "/api/order/verifyRazorpay",
+          response,
+          {
+            headers: {
+              Authorization: `Bearer ${Token}`
+            }
+          }
+        );
+
+        if (verifyResponse.data.success) {
+
+          toast.success("Payment Successful");
+
+          setcartItem({});
+
+          navigate("/orders");
+
+        } else {
+
+          toast.error("Payment Verification Failed");
+
+        }
+
+      } catch (error) {
+
+        console.log(error);
+
+        toast.error(error.message);
+
+      }
+
+    }
+
+  };
+
+  const rzp = new window.Razorpay(options);
+
+  rzp.on('payment.failed', function (response) {
+
+    console.log(response);
+
+    toast.error("Payment Failed");
+
+  });
+
+  rzp.open();
+
+}
 
 
 const onSubmitHandler = async (event) => {
@@ -73,8 +145,6 @@ const onSubmitHandler = async (event) => {
       return;
     }
 
-console.log(orderItems)
-
 
     let orderData = {
       address: formData,
@@ -85,21 +155,33 @@ console.log(orderItems)
 
     const tokenToUse = Token || localStorage.getItem("token");
 
-    const response = await axios.post(
-      backendURL + "/api/order/place",
-      orderData,
-      { headers: { Authorization: `Bearer ${tokenToUse}` } }
-    );
+switch(method){
 
-    if (response.data.success) {
+// api call for cod 
+ case 'cod': 
+const response = await axios.post(backendURL + "/api/order/place",orderData,
+{ headers: { Authorization: `Bearer ${tokenToUse}` } });
+
+    if (response.data.success){
       setcartItem({});
       navigate("/orders");
     } else {
       toast.error(response.data.message);
     }
+break ;
 
+case 'razorpay':
+const responserazorPay = await axios.post(backendURL + "/api/order/razorpay",orderData,
+{ headers: { Authorization: `Bearer ${tokenToUse}` } });
+
+    if (responserazorPay.data.success){
+      initPay(responserazorPay.data.order)
+    } else {
+      toast.error(responserazorPay.data.message);  
+    }
+    break ; 
+  }
   } catch (error) {
-
     toast.error(error.message);
 
   }
@@ -108,7 +190,7 @@ console.log(orderItems)
 
 
 
-  return (
+return (
     
 <form onSubmit={onSubmitHandler} className="flex flex-col sm:flex-row justify-between gap-10 max-w-6xl mx-auto pt-10 px-4">
 
@@ -220,7 +302,7 @@ console.log(orderItems)
 <div className="mt-12 sm:mt-0 w-full sm:w-[40%]">
 
   <div className="min-w-[280px]">
-    <Carttotal />
+    <Carttotal/>
   </div>
 
   {/* PAYMENT SECTION */}
@@ -230,20 +312,7 @@ console.log(orderItems)
 
     <div className="flex flex-col lg:flex-row gap-4 mt-4">
 
-      {/* STRIPE */}
-      <div
-        onClick={() => setmethod('stripe')}
-        className="flex items-center justify-center gap-3 border px-4 py-3 cursor-pointer rounded-md w-full lg:w-[170px] hover:shadow-sm"
-      >
-        <p className={`w-4 h-4 border rounded-full flex-shrink-0 ${method === 'stripe' ? 'bg-green-400' : ''}`}></p>
-
-        <img
-          src={assets.stripe_logo}
-          alt="Stripe"
-          className="h-5 object-contain"
-        />
-      </div>
-
+      
       {/* RAZORPAY */}
       <div
         onClick={() => setmethod('razorpay')}
@@ -276,8 +345,7 @@ console.log(orderItems)
 <div className="w-full mt-10">
   <button
     type="submit"
-    className="w-full bg-black text-white py-2  rounded-lg font-medium tracking-wide hover:bg-gray-800 transition"
-  >
+    className="w-full bg-black text-white py-2  rounded-lg font-medium tracking-wide hover:bg-gray-800 transition">
     PLACE ORDER
   </button>
 </div>

@@ -21,6 +21,7 @@ import ScrollToTop from "./Componets/ScrollToTop";
 import { Shopcontext } from './Context/Shopcontext';
 import ForgotPassword from './Pages/ForgotPassword';
 import ResetPassword from './Pages/ResetPassword';
+import Myprofile from './Componets/Myprofile';
 
 const App = () => {
   const { Token } = useContext(Shopcontext);
@@ -63,6 +64,8 @@ const App = () => {
         <Route path="/cart" element={Token ? <Cart /> : <Login />} />
         <Route path="/place-order" element={Token ? <Placeorder /> : <Login />} />
         <Route path="/orders" element={Token ? <Orders /> : <Login />} />
+        <Route path="/myprofile" element={Token ?<Myprofile/>: <Login />} />
+        
 
         <Route path="/login" element={<Login />} />
         <Route path="/forgot-password" element={<ForgotPassword />} />

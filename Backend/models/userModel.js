@@ -6,7 +6,7 @@ const userSchema = new mongoose.Schema({
   mobile_number: { type: String, unique: true, sparse: true, trim: true },
   password: { type: String, required: true },
 
-  aadhar_number: { 
+  aadhar_number:{ 
     type: String,
     unique: true,
     sparse: true,
