@@ -148,7 +148,6 @@ const getUserDetails = async (req, res) => {
 
 
 
-
 // UPDATE USER
 const updateUser = async (req, res) => {
   try {
