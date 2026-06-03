@@ -19,15 +19,16 @@ try{
 
  const userId = req.user.id;   
  const { items, amount, address, paymentMethod } = req.body;
+const orderData = {
+  userId,
+  items,
+  amount,
+  address,
+  paymentMethod,
+  payment: true,
+  date: Date.now()
+}
 
- const orderData = {
-    userId,
-    items,
-    amount,
-    address,
-    paymentMethod,
-    date: Date.now()
- }
 
  const newOrder = new orderModel(orderData);
 
@@ -142,10 +143,16 @@ const verifyRazorpay = async (req, res) => {
           razorpay_order_id
         );
 
-      await orderModel.findByIdAndUpdate(
-        razorpayOrder.receipt,
-        { payment: true }
-      );
+const updatedOrder = await orderModel.findByIdAndUpdate(
+  razorpayOrder.receipt,
+  { payment: true },
+  { new: true }
+);
+
+await userModel.findByIdAndUpdate(
+  updatedOrder.userId,
+  { cartData: {} }
+);
 
       res.json({
         success: true,
@@ -217,12 +224,15 @@ const userOrders = async (req, res) => {
 
     const userId = decoded.id
 
-
-    const orders = await orderModel.find({ userId })
-
-
-
-    res.json({
+const orders = await orderModel.find({
+  userId,
+  $or: [
+    { paymentMethod: "COD" },
+    { payment: true }
+  ]
+});
+   
+res.json({
       success: true,
       orders
     })

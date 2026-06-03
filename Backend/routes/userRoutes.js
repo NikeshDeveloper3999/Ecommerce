@@ -1,24 +1,15 @@
-// routes/userRoutes.js
-const express = require ("express");
+const express = require("express");
 const router = express.Router();
 
-const userController =  require( "../controllers/usercontroller");
-const authMiddleware = require("../middleware/Auth");
-
-// ================================
-// 🔹 USER AUTH & CRUD ROUTES
-// ================================
+const userController = require("../controllers/usercontroller");
+const authMiddleware = require("../middleware/authuser");
 
 router.post("/register", userController.registerUser);
-
 router.post("/login", userController.loginUser);
-
 router.put("/update/:id", userController.updateUser);
 router.delete("/delete/:id", userController.deleteUser);
 router.post("/forgot-password", userController.forgotPassword);
-router.post("/reset-password/:token",userController.resetPassword);
-router.get("/me",authMiddleware,  userController.getUserDetails);
-
-
+router.post("/reset-password/:token", userController.resetPassword);
+router.get("/me", authMiddleware, userController.getUserDetails);
 
 module.exports = router;

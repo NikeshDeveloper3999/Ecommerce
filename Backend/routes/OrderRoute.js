@@ -10,7 +10,7 @@ const {
 } = require("../controllers/OrderController");
 
 const adminAuth = require("../Middleware/AdminAuth");
-const authUser = require("../Middleware/Auth");
+const authUser = require("../Middleware/authuser");
 
 const orderRouter = express.Router();
 

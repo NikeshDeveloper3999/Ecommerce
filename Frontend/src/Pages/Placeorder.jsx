@@ -35,76 +35,80 @@ const onchangeHandler = (event)=>{
 
 const initPay = (order) => {
 
-  const options = {
+const options = {
+key: import.meta.env.VITE_RAZORPAY_KEY_ID,
 
-    key: import.meta.env.VITE_RAZORPAY_KEY_ID,
+amount: order.amount,
 
-    amount: order.amount,
+currency: order.currency,
 
-    currency: order.currency,
+name: "Order Payment",
 
-    name: "Order Payment",
+description: "Order Payment",
 
-    description: "Order Payment",
+order_id: order.id,
 
-    order_id: order.id,
+receipt: order.receipt,
 
-    receipt: order.receipt,
+modal: {
+  ondismiss: function () {
+    toast.error("Payment Cancelled");
+  }
+},
 
-    handler: async (response) => {
+handler: async (response) => {
 
-      try {
+  try {
 
-        const verifyResponse = await axios.post(
-          backendURL + "/api/order/verifyRazorpay",
-          response,
-          {
-            headers: {
-              Authorization: `Bearer ${Token}`
-            }
-          }
-        );
-
-        if (verifyResponse.data.success) {
-
-          toast.success("Payment Successful");
-
-          setcartItem({});
-
-          navigate("/orders");
-
-        } else {
-
-          toast.error("Payment Verification Failed");
-
+    const verifyResponse = await axios.post(
+      backendURL + "/api/order/verifyRazorpay",
+      response,
+      {
+        headers: {
+          Authorization: `Bearer ${Token}`
         }
-
-      } catch (error) {
-
-        console.log(error);
-
-        toast.error(error.message);
-
       }
+    );
+
+    if (verifyResponse.data.success) {
+
+      toast.success("Payment Successful");
+
+      setcartItem({});
+
+      navigate("/orders");
+
+    } else {
+
+      toast.error("Payment Verification Failed");
 
     }
 
-  };
+  } catch (error) {
 
-  const rzp = new window.Razorpay(options);
+    console.log(error);
 
-  rzp.on('payment.failed', function (response) {
+    toast.error(error.message);
 
-    console.log(response);
-
-    toast.error("Payment Failed");
-
-  });
-
-  rzp.open();
+  }
 
 }
 
+};
+
+const rzp = new window.Razorpay(options);
+
+rzp.on("payment.failed", function (response) {
+
+console.log(response);
+
+toast.error("Payment Failed");
+
+});
+
+rzp.open();
+
+}
 
 const onSubmitHandler = async (event) => {
 
@@ -357,3 +361,6 @@ return (
 }
 
 export default Placeorder
+
+
+
